@@ -12,7 +12,7 @@
 # In this file I will create a simple GET route that returns the number of entries in 'data' array and another DELETE route to delete an item 
 
 
-from flask import Flask, request
+from flask import Flask
 app=Flask(__name__)
 
 from data import data
@@ -26,19 +26,31 @@ def get_count():
     
     return {'message': 'Data is not loaded'}, 404
 
-# DELETE route
-@app.route('/delete', methods=['DELETE'])
-def delete_person():
 
+# GET person by uuid
+@app.route('/person/<id>', methods=['GET'])
+def find_by_uuid(id):
+    for person in data:
+        if id==person.get('id'):
+            return person, 200    
+    
+    return {"message": f"person with id: {id} is not found"}, 404
+
+# DELETE person by id route
+@app.route('/person/<id>', methods=['DELETE'])
+def find_by_uuid_and_delete(id):
     # use request object to access id of person to be deleted
-    id=request.args.get('id')
-
-    if (not id):
-        return {"message": "no id provided"}
     
     for person in data:
         if id==person.get('id'):
+            # length of array before deletion
+            print(len(data))
+
             data.remove(person)
-            return {"message": f"person {person.get('first-name')} with id: {id} is deleted"}
+
+            #length of array after deletion 
+            print(len(data))
+            
+            return {"message": f"person {person.get('first_name')} with id: {id} is deleted"}, 200
         
-    return {"message": f"no person with id: {id} is found"}
+    return {"message": f"no person with id: {id} is found"},404
