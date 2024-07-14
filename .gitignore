@@ -7,6 +7,7 @@
 # Ignore virtual environment directories
 venv/
 env/
+myenv/
 
 # Ignore IDE files
 .vscode/
